@@ -7,7 +7,7 @@ data_set = pd.read_csv('dataset.csv')
 
 # Диаграмма рассеяния Площадь vs Цена
 plt.figure(figsize=(10,6))
-sns.scatterplot(x='площадь', y='цена', data=data_set, color='green', s=50, alpha=0.6)
+sns.scatterplot(x='площадь m^2', y='цена', data=data_set, color='green', s=50, alpha=0.6)
 plt.title('Зависимость площади от цены', fontsize=15)
 plt.xlabel('Площадь (м²)', fontsize=12)
 plt.ylabel('Цена (руб.)', fontsize=12)
