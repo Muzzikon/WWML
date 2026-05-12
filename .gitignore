@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+*.csv
+!dataset.csv
+
+.venv/
+venv/
+env/
+
+*.png
