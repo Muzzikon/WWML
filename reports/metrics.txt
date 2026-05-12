@@ -1,0 +1,15 @@
+KNN parameter selection:
+Best k: 7
+LOO MAE: 961,337.60
+
+Model: Linear Regression
+MAE:  1,416,163.17
+RMSE: 1,977,755.82
+R2:   0.9144
+
+Model: KNN Regressor
+MAE:  893,511.77
+RMSE: 1,192,873.12
+R2:   0.9688
+
+Best model: KNN Regressor
