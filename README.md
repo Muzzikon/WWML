@@ -230,3 +230,9 @@ reports/metrics.txt
 - `reports/figures/price_distribution.png`
 - `reports/figures/correlation_matrix.png`
 - `reports/figures/area_price_dependency.png`
+
+---
+
+## Демо
+
+Сервис доступен по ссылке: https://2owbulnmrstrrfv3b3p5fs.streamlit.app
