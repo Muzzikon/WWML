@@ -5,7 +5,7 @@ import pandas as pd
 
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.model_selection import GridSearchCV, LeaveOneOut, train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -37,31 +37,6 @@ def evaluate_model(name, model, X_train, X_test, y_train, y_test):
     }
 
 
-def find_best_knn(X_train, y_train):
-    knn_pipeline = Pipeline([
-        ("scaler", StandardScaler()),
-        ("knn", KNeighborsRegressor(weights="distance"))
-    ])
-
-    parameters = {
-        "knn__n_neighbors": [3, 5, 7, 9, 11, 15, 21]
-    }
-
-    loo = LeaveOneOut()
-
-    search = GridSearchCV(
-        estimator=knn_pipeline,
-        param_grid=parameters,
-        scoring="neg_mean_absolute_error",
-        cv=loo,
-        n_jobs=-1
-    )
-
-    search.fit(X_train, y_train)
-
-    return search.best_estimator_, search.best_params_, -search.best_score_
-
-
 def main():
     df = pd.read_csv(DATA_PATH)
 
@@ -75,10 +50,13 @@ def main():
         random_state=42
     )
 
-    best_knn_model, best_knn_params, best_loo_mae = find_best_knn(
-        X_train,
-        y_train
-    )
+    best_knn_model = Pipeline([
+        ("scaler", StandardScaler()),
+        ("knn", KNeighborsRegressor(
+            n_neighbors=9,
+            weights="distance"
+        ))
+    ])
 
     models = [
         (
@@ -108,9 +86,9 @@ def main():
     best_model = best_result["model"]
 
     metrics_lines = [
-        "KNN parameter selection:",
-        f"Best k: {best_knn_params['knn__n_neighbors']}",
-        f"LOO MAE: {best_loo_mae:,.2f}",
+        "KNN parameters:",
+        "n_neighbors: 9",
+        "weights: distance",
         ""
     ]
 
