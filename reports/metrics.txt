@@ -4,12 +4,20 @@ Models:
 Linear Regression
 KNN Regressor
 
-KNN validation metrics:
+KNN validation:
 Optimal k by Leave-One-Out: 5
-Minimum LOO error: 0.1037
+Minimum LOO relative error: 0.1037
 
-Accuracy with scaling:
-Linear Regression: 0.7450
-KNN Regressor: 0.9000
+Regression metrics on test set:
 
-Best model: KNN Regressor
+Model: Linear Regression
+MAE:  1,475,560.59
+RMSE: 1,958,889.42
+R2:   0.9250
+
+Model: KNN Regressor
+MAE:  884,111.92
+RMSE: 1,180,577.22
+R2:   0.9728
+
+Best model by RMSE: KNN Regressor
