@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.model_selection import GridSearchCV, LeaveOneOut, train_test_split
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.pipeline import Pipeline
@@ -31,14 +32,18 @@ def evaluate_model(name, model, X_train, X_test, y_train, y_test):
     model.fit(X_train, y_train)
 
     predictions = model.predict(X_test)
-    errors = relative_error(y_test, predictions)
+    predictions = np.clip(predictions, 0, None)
 
-    accuracy_with_scaling = (errors <= 0.20).mean()
+    mae = mean_absolute_error(y_test, predictions)
+    rmse = np.sqrt(mean_squared_error(y_test, predictions))
+    r2 = r2_score(y_test, predictions)
 
     return {
         "name": name,
         "model": model,
-        "accuracy_with_scaling": accuracy_with_scaling
+        "mae": mae,
+        "rmse": rmse,
+        "r2": r2
     }
 
 
@@ -115,9 +120,9 @@ def main():
         )
         results.append(result)
 
-    best_result = max(
+    best_result = min(
         results,
-        key=lambda item: item["accuracy_with_scaling"]
+        key=lambda item: item["rmse"]
     )
 
     best_model = best_result["model"]
@@ -129,21 +134,25 @@ def main():
         "Linear Regression",
         "KNN Regressor",
         "",
-        "KNN validation metrics:",
+        "KNN validation:",
         f"Optimal k by Leave-One-Out: {optimal_k}",
-        f"Minimum LOO error: {minimum_loo_error:.4f}",
+        f"Minimum LOO relative error: {minimum_loo_error:.4f}",
         "",
-        "Accuracy with scaling:",
+        "Regression metrics on test set:",
     ]
 
     for result in results:
-        metrics_lines.append(
-            f"{result['name']}: {result['accuracy_with_scaling']:.4f}"
-        )
+        metrics_lines.extend([
+            "",
+            f"Model: {result['name']}",
+            f"MAE:  {result['mae']:,.2f}",
+            f"RMSE: {result['rmse']:,.2f}",
+            f"R2:   {result['r2']:.4f}",
+        ])
 
     metrics_lines.extend([
         "",
-        f"Best model: {best_result['name']}"
+        f"Best model by RMSE: {best_result['name']}"
     ])
 
     metrics_text = "\n".join(metrics_lines)
