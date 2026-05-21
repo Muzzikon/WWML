@@ -14,6 +14,41 @@ FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 # Загрузим данные
 data_set = pd.read_csv(DATA_PATH)
 
+# Распределение квартир по цене
+plt.figure(figsize=(10, 6))
+
+sns.histplot(
+    data_set["цена"] / 1_000_000,
+    bins=25,
+    kde=True,
+    color="blue",
+    alpha=0.5
+)
+
+plt.title("Распределение квартир по цене", fontsize=15)
+plt.xlabel("Цена (млн руб.)", fontsize=12)
+plt.ylabel("Количество квартир", fontsize=12)
+
+plt.grid(True, linestyle="--", alpha=0.7)
+plt.savefig(FIGURES_DIR / "price_distribution.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+# Матрица корреляции
+plt.figure(figsize=(10, 8))
+
+corr_matrix = data_set.corr(numeric_only=True)
+
+sns.heatmap(
+    corr_matrix,
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f"
+)
+
+plt.title("Матрица корреляции признаков", fontsize=15)
+plt.savefig(FIGURES_DIR / "correlation_matrix.png", dpi=300, bbox_inches="tight")
+plt.show()
+
 # Диаграмма рассеяния Площадь vs Цена
 plt.figure(figsize=(10, 6))
 sns.scatterplot(
